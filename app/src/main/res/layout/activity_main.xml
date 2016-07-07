@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scroll_encuesta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ejecutar_pregunta"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true"
+        android:scrollbarStyle="outsideInset">
+        
+        <LinearLayout
+            android:id="@+id/contenedor_preguntas"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </ScrollView>
+    <!--
+    <LinearLayout
+        android:id="@+id/ejecutar_pregunta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:weightSum="2">
+        
+        <ImageView
+            android:layout_margin="8dp"
+            android:id="@+id/izquierda"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:onClick="addLeft"
+            android:src="@drawable/success"/>
+
+        <ImageView
+            android:layout_margin="8dp"
+            android:id="@+id/derecha"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:onClick="addRigth"
+            android:src="@drawable/error"/>
+
+    </LinearLayout>
+    -->
+
+</RelativeLayout>
