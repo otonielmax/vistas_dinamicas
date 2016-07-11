@@ -3,6 +3,7 @@ package com.example.otoni.preguntasdinamicas;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         layoutGroup = (ViewGroup) findViewById(R.id.contenedor_preguntas);
         scrollView = (ScrollView) findViewById(R.id.scroll_encuesta);
 
@@ -59,16 +62,7 @@ public class MainActivity extends AppCompatActivity {
         hilo.execute(params);
     }
 
-    public void addRigth(View button) {
-        addChild();
-    }
-
-    public void addLeft(View button) {
-        addChild();
-    }
-
     private void addChild() {
-
         final Encuesta encuesta = lista_preguntas.get(posicion);
 
         int layout = -1;
@@ -92,19 +86,21 @@ public class MainActivity extends AppCompatActivity {
             case 6:
                 layout = R.layout.emergente_continuacion;
                 break;
+            case 7:
+                layout = R.layout.emergente_doble_accion;
+                break;
             default:
                 layout = -1;
                 break;
         }
 
-        Log.d("Actividad", encuesta.getPregunta() + " " + encuesta.getTipo_pregunta());
         LayoutInflater inflater = LayoutInflater.from(this);
 
         if (layout != -1) {
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(layout, null, false);
 
             TextView textView = (TextView) linearLayout.findViewById(R.id.pregunta_equipo_frio);
-            textView.setText(encuesta.getSecuencia() + " - " + encuesta.getPregunta());
+            textView.setText(encuesta.getPregunta());
 
             switch (encuesta.getTipo_pregunta()) {
                 case 1:
@@ -150,18 +146,30 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     }
-
                     break;
 
-                case 3:
-                    Spinner spinner = (Spinner) linearLayout.findViewById(R.id.respuesta_spinner_rigth);
-                    spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, encuesta.getDescripcion_accion()));
+                case 2:
+                    List<String> opciones = new ArrayList<>();
+                    opciones.add("Selecciona una opcion");
+
+                    List<String> aux = encuesta.getDescripcion_accion();
+                    for (int j = 0; j < aux.size(); j++) {
+                        opciones.add(aux.get(j));
+                    }
+
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones);
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    Spinner spinner = (Spinner) linearLayout.findViewById(R.id.respuesta_spinner);
+                    spinner.setAdapter(arrayAdapter);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            secuencia = encuesta.getEjecutar().get(i);
-                            buscarPregunta();
-                            addChild();
+                            if (i > 0) {
+                                secuencia = encuesta.getEjecutar().get(i - 1);
+                                buscarPregunta();
+                                addChild();
+                            }
                         }
 
                         @Override
@@ -169,6 +177,85 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
+
+                    break;
+
+                case 3:
+                    List<String> opciones2 = new ArrayList<>();
+                    opciones2.add("Selecciona una opcion");
+
+                    List<String> aux2 = encuesta.getDescripcion_accion();
+                    for (int j = 0; j < aux2.size(); j++) {
+                        opciones2.add(aux2.get(j));
+                    }
+
+                    ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones2);
+                    arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    Spinner spinner2 = (Spinner) linearLayout.findViewById(R.id.respuesta_spinner_rigth);
+                    spinner2.setAdapter(arrayAdapter2);
+                    spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            if (i > 0) {
+                                secuencia = encuesta.getEjecutar().get(i - 1);
+                                buscarPregunta();
+                                addChild();
+                            }
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                    break;
+
+                case 4:
+                    if (encuesta.getDescripcion_accion().get(0).equals("SI")) {
+                        ImageView si = (ImageView) linearLayout.findViewById(R.id.si_equipo_frio);
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                secuencia = encuesta.getEjecutar().get(0);
+                                buscarPregunta();
+                                addChild();
+                            }
+                        });
+
+                        ImageView no = (ImageView) linearLayout.findViewById(R.id.no_equipo_frio);
+                        no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                secuencia = encuesta.getEjecutar().get(1);
+                                buscarPregunta();
+                                addChild();
+                            }
+                        });
+                    }
+                    else {
+                        ImageView si = (ImageView) linearLayout.findViewById(R.id.si_equipo_frio);
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                secuencia = encuesta.getEjecutar().get(1);
+                                buscarPregunta();
+                                addChild();
+                            }
+                        });
+
+                        ImageView no = (ImageView) linearLayout.findViewById(R.id.no_equipo_frio);
+                        no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                secuencia = encuesta.getEjecutar().get(0);
+                                buscarPregunta();
+                                addChild();
+                            }
+                        });
+                    }
+                    break;
 
                 case 5:
                     RadioGroup group = (RadioGroup) linearLayout.findViewById(R.id.respuesta_radio);
@@ -212,10 +299,66 @@ public class MainActivity extends AppCompatActivity {
 
                     ventana.show();
                     break;
+                case 7:
+                    final Dialog ventanaDoble = new Dialog(MainActivity.this);
+                    ventanaDoble.setTitle("Aviso");
+                    ventanaDoble.setContentView(layout);
 
+                    TextView textDoble = (TextView) ventanaDoble.findViewById(R.id.pregunta_equipo_frio);
+                    textDoble.setText(encuesta.getPregunta());
+
+                    LinearLayout botonSi = (LinearLayout) ventanaDoble.findViewById(R.id.dialog_button_si);
+                    botonSi.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (encuesta.getEjecutar().get(0) < encuesta.getEjecutar().get(1)) {
+                                secuencia = encuesta.getEjecutar().get(1);
+                            }
+                            else {
+                                secuencia = encuesta.getEjecutar().get(0);
+                            }
+                            buscarPregunta();
+                            addChild();
+                            ventanaDoble.dismiss();
+                        }
+                    });
+
+                    LinearLayout botonNo = (LinearLayout) ventanaDoble.findViewById(R.id.dialog_button_no);
+                    botonNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (encuesta.getEjecutar().get(0) < encuesta.getEjecutar().get(1)) {
+                                secuencia = encuesta.getEjecutar().get(0);
+                            }
+                            else {
+                                secuencia = encuesta.getEjecutar().get(1);
+                            }
+
+                            buscarPregunta();
+                            addChild();
+                            ventanaDoble.dismiss();
+                        }
+                    });
+
+                    if (encuesta.getEjecutar().get(0) < encuesta.getEjecutar().get(1)) {
+                        TextView textViewSi = (TextView) botonSi.findViewById(R.id.dialog_text_si);
+                        textViewSi.setText(encuesta.getDescripcion_accion().get(1));
+
+                        TextView textViewNo = (TextView) botonNo.findViewById(R.id.dialog_text_no);
+                        textViewNo.setText(encuesta.getDescripcion_accion().get(0));
+                    }
+                    else {
+                        TextView textViewSi = (TextView) botonSi.findViewById(R.id.dialog_text_si);
+                        textViewSi.setText(encuesta.getDescripcion_accion().get(0));
+
+                        TextView textViewNo = (TextView) botonNo.findViewById(R.id.dialog_text_no);
+                        textViewNo.setText(encuesta.getDescripcion_accion().get(1));
+                    }
+
+                    ventanaDoble.show();
             }
 
-            if (encuesta.getTipo_pregunta() != 6) {
+            if (encuesta.getTipo_pregunta() < 6) {
                 layoutGroup.addView(linearLayout);
             }
 
@@ -235,8 +378,8 @@ public class MainActivity extends AppCompatActivity {
     public void buscarPregunta() {
         for (int i = 0; i < lista_preguntas.size(); i++) {
             if (secuencia == lista_preguntas.get(i).getSecuencia()) {
+                Log.d("Buscar", "Ejecutar " + secuencia + " Secuencia " + lista_preguntas.get(i).getSecuencia() + " i " + i);
                 posicion = i;
-                Log.d("Posicion", posicion + "" );
                 break;
             }
         }
@@ -267,9 +410,9 @@ public class MainActivity extends AppCompatActivity {
                 //client = new XMLRPCClient(new URL("http://192.168.1.102:4142"));
                 //client = new XMLRPCClient(new URL("http://192.168.0.101:4142"));
                 //client = new XMLRPCClient(new URL("http://162.252.58.171:4142"));
-                //client = new XMLRPCClient(new URL("http://172.16.0.102:4142"));
+                client = new XMLRPCClient(new URL("http://172.16.0.101:4142"));
                 //client = new XMLRPCClient(new URL("http://201.242.192.105:4142"));
-                client = new XMLRPCClient(new URL("http://192.168.1.38:4142"));
+                //client = new XMLRPCClient(new URL("http://192.168.1.38:4142"));
 
                 Vector paramentros = new Vector();
                 paramentros.add(id_rol);
@@ -317,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
                             lista_preguntas.add(nueva);
 
                             if (nueva.getSecuencia() == 1) {
-                                posicion = lista_preguntas.size() - 1;
+                                posicion = x;
                             }
                         }
                     }

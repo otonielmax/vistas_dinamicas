@@ -12,10 +12,10 @@
         android:background="@drawable/content_encuestas"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
-        android:id="@+id/content_4_no_refrigeracion_vista_2">
+        android:id="@+id/content_equipo_frio">
 
         <LinearLayout
-            android:id="@+id/header_4_no_refrigeracin_vista_2"
+            android:id="@+id/header_equipo_frio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -39,21 +39,21 @@
             android:orientation="horizontal"
             android:padding="20dp"
             android:gravity="center_vertical|center_horizontal"
-            android:id="@+id/expand_4_no_refriferacion_2">
+            android:id="@+id/expand_equipo_frio">
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/success"
                 android:layout_marginRight="20dp"
-                android:id="@+id/respuesta4b_si_equipo_frio"/>
+                android:id="@+id/si_equipo_frio"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/error"
                 android:layout_marginLeft="20dp"
-                android:id="@+id/respuesta4b_no_equipo_frio"/>
+                android:id="@+id/no_equipo_frio"/>
 
         </LinearLayout>
 
