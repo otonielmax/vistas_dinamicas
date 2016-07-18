@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
                 //client = new XMLRPCClient(new URL("http://192.168.1.102:4142"));
                 //client = new XMLRPCClient(new URL("http://192.168.0.101:4142"));
                 //client = new XMLRPCClient(new URL("http://162.252.58.171:4142"));
-                client = new XMLRPCClient(new URL("http://172.16.0.101:4142"));
+                client = new XMLRPCClient(new URL("http://172.16.0.102:4142"));
                 //client = new XMLRPCClient(new URL("http://201.242.192.105:4142"));
                 //client = new XMLRPCClient(new URL("http://192.168.1.38:4142"));
 
